@@ -48,7 +48,7 @@ jobs:
         pytest
 
     - name: Build the Docker image
-      run: docker build -t akashk1297/test_repo/github_actions_cicd_pipeline:v1 .
+      run: docker build -t akashk1297/github_actions_cicd_pipeline:v1 .
 
     - name: Push the Docker image to DockerHub
       env:
@@ -56,7 +56,7 @@ jobs:
         DOCKER_HUB_LOGIN_PASSWORD: "${{secrets.DOCKER_HUB_LOGIN_PASSWORD}}"
       run: |
         echo "$DOCKER_HUB_LOGIN_PASSWORD" | docker login -u $DOCKER_HUB_LOGIN_USER --password-stdin
-        docker push akashk1297/test_repo/github_actions_cicd_pipeline:v1
+        docker push akashk1297/github_actions_cicd_pipeline:v1
       
   # -------------------------------------------------------
   # Continuous Deployment (CD) Stage: Release to Cloud
