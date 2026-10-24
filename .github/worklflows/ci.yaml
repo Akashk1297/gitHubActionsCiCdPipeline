@@ -1,0 +1,70 @@
+name: Python CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # -------------------------------------------------------
+  # Continuous Integration (CI) Stage: Test & Lint
+  # -------------------------------------------------------
+  continuous-integration:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Test across actively supported Python environments
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+    - name: Check out Repository Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix:python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        # Automatically caches pip packages based on dependency files
+        cache: 'pip' 
+
+    - name: Create virtual env and install Core Dependencies
+      run: |
+        python -m venv venv
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install ruff pytest
+
+    - name: Build python app
+      run: |
+        python myapp.py
+        
+    - name: Lint Code Base (Ruff)
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        ruff check .
+
+    - name: Execute Test Suite (Pytest)
+      run: |
+        pytest
+
+  # -------------------------------------------------------
+  # Continuous Deployment (CD) Stage: Release to Cloud
+  # -------------------------------------------------------
+  continuous-deployment:
+    needs: continuous-integration
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out Repository Code
+      uses: actions/checkout@v4
+
+    # EXAMPLE: Deploy to platforms like Heroku, AWS, or Azure
+    # Ensure variables like API keys are kept safe in your Repository Secrets
+    - name: Deploy app to Production
+      env:
+        DEPLOY_API_KEY: ${{ secrets.PRODUCTION_API_KEY }}
+      run: |
+        echo "Executing secure deployment scripts here..."
+        kubectl apply -f deployment.yaml
