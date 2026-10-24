@@ -38,10 +38,10 @@ jobs:
       run: |
         echo "Build step to be added later"
         
-    - name: Lint Code Base (Ruff)
+    - name: Lint Code Base & fix using Ruff
       run: |
         # Stop the build if there are Python syntax errors or undefined names
-        ruff check .
+        pipx run ruff check --fix .
 
     - name: Execute Test Suite (Pytest)
       run: |
