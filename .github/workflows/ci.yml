@@ -28,10 +28,8 @@ jobs:
         # Automatically caches pip packages based on dependency files
         cache: 'pip' 
 
-    - name: Create virtual env and install Core Dependencies
+    - name: Install Core Dependencies
       run: |
-        python -m venv venv
-        source venv/bin/activate
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install ruff pytest
@@ -54,10 +52,10 @@ jobs:
 
     - name: Push the Docker image to DockerHub
       env:
-        DOCKER_HUB_LOGIC_USER: "{{secrets.DOCKER_HUB_LOGIC_USER}}"
-        DOCKER_HUB_LOGIC_PASSWORD: "{{secrets.DOCKER_HUB_LOGIN_PASSWORD}}"
+        DOCKER_HUB_LOGIN_USER: "{{secrets.DOCKER_HUB_LOGIN_USER}}"
+        DOCKER_HUB_LOGIN_PASSWORD: "{{secrets.DOCKER_HUB_LOGIN_PASSWORD}}"
       run: |
-        echo "$DOCKER_HUB_LOGIC_PASSWORD" | docker login -u $DOCKER_HUB_LOGIC_USER --password-stdin
+        echo "$DOCKER_HUB_LOGIN_PASSWORD" | docker login -u $DOCKER_HUB_LOGIN_USER --password-stdin
         docker push gitHubActionsCiCdPipeline:v1
       
   # -------------------------------------------------------
