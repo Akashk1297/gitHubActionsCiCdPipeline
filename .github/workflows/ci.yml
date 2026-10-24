@@ -49,6 +49,9 @@ jobs:
       run: |
         pytest
 
+    - name: Build the Docker image
+      run: docker build -t gitHubActionsCiCdPipeline:v1 .
+      
   # -------------------------------------------------------
   # Continuous Deployment (CD) Stage: Release to Cloud
   # -------------------------------------------------------
