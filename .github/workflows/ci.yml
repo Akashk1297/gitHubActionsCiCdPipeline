@@ -38,7 +38,7 @@ jobs:
 
     - name: Build python app
       run: |
-        python myapp.py
+        echo "Build step to be added later"
         
     - name: Lint Code Base (Ruff)
       run: |
@@ -51,6 +51,14 @@ jobs:
 
     - name: Build the Docker image
       run: docker build -t gitHubActionsCiCdPipeline:v1 .
+
+    - name: Push the Docker image to DockerHub
+      env:
+        DOCKER_HUB_LOGIC_USER: "{{secrets.DOCKER_HUB_LOGIC_USER}}"
+        DOCKER_HUB_LOGIC_PASSWORD: "{{secrets.DOCKER_HUB_LOGIN_PASSWORD}}"
+      run: |
+        echo "$DOCKER_HUB_LOGIC_PASSWORD" | docker login -u $DOCKER_HUB_LOGIC_USER --password-stdin
+        docker push gitHubActionsCiCdPipeline:v1
       
   # -------------------------------------------------------
   # Continuous Deployment (CD) Stage: Release to Cloud
