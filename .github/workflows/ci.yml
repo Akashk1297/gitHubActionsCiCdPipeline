@@ -52,8 +52,8 @@ jobs:
 
     - name: Push the Docker image to DockerHub
       env:
-        DOCKER_HUB_LOGIN_USER: "{{secrets.DOCKER_HUB_LOGIN_USER}}"
-        DOCKER_HUB_LOGIN_PASSWORD: "{{secrets.DOCKER_HUB_LOGIN_PASSWORD}}"
+        DOCKER_HUB_LOGIN_USER: "${{secrets.DOCKER_HUB_LOGIN_USER}}"
+        DOCKER_HUB_LOGIN_PASSWORD: "${{secrets.DOCKER_HUB_LOGIN_PASSWORD}}"
       run: |
         echo "$DOCKER_HUB_LOGIN_PASSWORD" | docker login -u $DOCKER_HUB_LOGIN_USER --password-stdin
         docker push akashk1297/test_repo/github_actions_cicd_pipeline:v1
