@@ -70,6 +70,17 @@ jobs:
     - name: Check out Repository Code
       uses: actions/checkout@v4
 
+  # Install kubectl CLI on the runner
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v4
+      with:
+       version: 'v1.30.0' # Specify your cluster version
+       
+  # Example command utilizing kubectl
+    - name: Check Cluster Nodes
+      run: |
+        kubectl get nodes
+          
     # EXAMPLE: Deploy to platforms like Heroku, AWS, or Azure
     # Ensure variables like API keys are kept safe in your Repository Secrets
     - name: Deploy app to Production
